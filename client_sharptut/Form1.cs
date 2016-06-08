@@ -89,6 +89,27 @@ namespace client_sharptut
         {
             textBox3.Text = "";
         }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                e.Handled = true;
+                byte[] outStream = System.Text.Encoding.ASCII.GetBytes(textBox2.Text + "$");
+                serverStream.Write(outStream, 0, outStream.Length);
+                serverStream.Flush();
+                textBox2.Text = "";
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            /*
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes("Disconnect" + "$");
+            serverStream.Write(outStream, 0, outStream.Length);
+            serverStream.Flush();
+            */
+        }
     }
     }
 
