@@ -23,12 +23,12 @@ namespace ConsoleApplication1
             {
                 counter += 1;
                 clientSocket = serverSocket.AcceptTcpClient();
-
-                byte[] bytesFrom = new byte[10025];
                 string dataFromClient = null;
 
+                byte[] bytesFrom = new byte[2048];
                 NetworkStream networkStream = clientSocket.GetStream();
-                networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
+                //Int32 buffsize = clientSocket.ReceiveBufferSize;
+                networkStream.Read(bytesFrom, 0, bytesFrom.Length);
                 dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
                 dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("$"));
 
@@ -103,7 +103,8 @@ namespace ConsoleApplication1
                 {
                     requestCount = requestCount + 1;
                     NetworkStream networkStream = clientSocket.GetStream();
-                    networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
+                    Int32 buffersize = (int)clientSocket.ReceiveBufferSize;
+                    networkStream.Read(bytesFrom, 0, 2048);
                     dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
                     dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("$"));
                     Console.WriteLine("From client - " + clNo + " : " + dataFromClient);

@@ -33,6 +33,7 @@ namespace client_sharptut
 
             private void button2_Click(object sender, EventArgs e)
             {
+                
                 readData = "Conected to Chat Server ...";
                 msg();
                 clientSocket.Connect("127.0.0.1", 8888);
@@ -44,17 +45,18 @@ namespace client_sharptut
 
                 Thread ctThread = new Thread(getMessage);
                 ctThread.Start();
-            }
+                textBox3.Enabled = false;
+        }
 
             private void getMessage()
             {
                 while (true)
                 {
                     serverStream = clientSocket.GetStream();
-                    int buffSize = 0;
-                    byte[] inStream = new byte[10025];
-                    buffSize = clientSocket.ReceiveBufferSize;
-                    serverStream.Read(inStream, 0, buffSize);
+                    //Int32 buffSize = clientSocket.ReceiveBufferSize;
+                    byte[] inStream = new byte[2048];
+                    //buffSize = (int)clientSocket.ReceiveBufferSize;
+                    serverStream.Read(inStream, 0, inStream.Length);
                     string returndata = System.Text.Encoding.ASCII.GetString(inStream);
                     readData = "" + returndata;
                     msg();
@@ -69,6 +71,24 @@ namespace client_sharptut
                     textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData;
             }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox1.Lines.Count() > 11)
+                if (!textBox3.Enabled)
+                {
+                    textBox1.Text = textBox1.Text.Substring(textBox1.Lines[0].Length + Environment.NewLine.Length);
+                }
         }
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //if(e.KeyChar == Enter)
+        }
+
+        private void textBox3_Enter(object sender, EventArgs e)
+        {
+            textBox3.Text = "";
+        }
+    }
     }
 
